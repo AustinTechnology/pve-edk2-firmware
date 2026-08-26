@@ -39,6 +39,8 @@ OVMF32_4M_FLAGS = $(OVMF_COMMON_FLAGS) -DFD_SIZE_4MB
 OVMF32_4M_SMM_FLAGS =  $(OVMF32_4M_FLAGS) -DSMM_REQUIRE=TRUE
 OVMF_SEV_4M_FLAGS = $(OVMF_4M_FLAGS)
 OVMF_TDX_4M_FLAGS = $(OVMF_4M_FLAGS)
+# the microvm platform has neither SMM nor TPM support
+MICROVM_4M_FLAGS = $(COMMON_FLAGS) -DFD_SIZE_4MB
 
 AAVMF_FLAGS  = $(COMMON_FLAGS)
 AAVMF_FLAGS += -DTPM2_ENABLE=TRUE
@@ -59,7 +61,7 @@ undefine CONF_PATH
 %:
 	dh $@
 
-override_dh_auto_build: build-qemu-efi-aarch64 build-ovmf build-ovmf32 build-ovmf-sev build-ovmf-tdx build-qemu-efi-riscv64
+override_dh_auto_build: build-qemu-efi-aarch64 build-ovmf build-ovmf32 build-ovmf-sev build-ovmf-tdx build-microvm build-qemu-efi-riscv64
 
 debian/setup-build-stamp:
 	cp -a debian/Logo.bmp MdeModulePkg/Logo/Logo.bmp
@@ -100,6 +102,14 @@ OVMF_TDX_ENROLL = $(OVMF_TDX_BUILD_DIR)/X64/EnrollDefaultKeys.efi
 OVMF_TDX_BINARIES = $(OVMF_TDX_SHELL)
 OVMF_TDX_IMAGES  := $(addprefix $(OVMF_TDX_INSTALL_DIR)/,OVMF_TDX_4M.fd)
 OVMF_TDX_PREENROLLED_IMAGES := $(addprefix $(OVMF_TDX_INSTALL_DIR)/,OVMF_TDX_4M.ms.fd)
+
+MICROVM_INSTALL_DIR = debian/microvm-install
+MICROVM_BUILD_ROOT = Build/MicrovmX64
+MICROVM_BUILD_DIR = $(MICROVM_BUILD_ROOT)/$(BUILD_TYPE)_$(EDK2_TOOLCHAIN)
+MICROVM_SHELL = $(MICROVM_BUILD_DIR)/X64/Shell.efi
+MICROVM_BINARIES = $(MICROVM_SHELL)
+# the microvm platform only defines a combined flash image, there is no CODE/VARS split
+MICROVM_IMAGES := $(addprefix $(MICROVM_INSTALL_DIR)/,MICROVM_4M.fd)
 
 QEMU_EFI_BUILD_ROOT = Build/ArmVirtQemu-$(EDK2_HOST_ARCH)
 QEMU_EFI_BUILD_DIR = $(QEMU_EFI_BUILD_ROOT)/$(BUILD_TYPE)_$(EDK2_TOOLCHAIN)
@@ -158,6 +168,18 @@ $(OVMF_TDX_BINARIES) $(OVMF_TDX_IMAGES): debian/setup-build-stamp
 			$(OVMF_TDX_4M_FLAGS) -b $(BUILD_TYPE)
 	cp $(OVMF_TDX_BUILD_DIR)/FV/OVMF.fd \
 		$(OVMF_TDX_INSTALL_DIR)/OVMF_TDX_4M.fd
+
+build-microvm: $(MICROVM_BINARIES) $(MICROVM_IMAGES)
+$(MICROVM_BINARIES) $(MICROVM_IMAGES): debian/setup-build-stamp
+	rm -rf $(MICROVM_INSTALL_DIR)
+	mkdir $(MICROVM_INSTALL_DIR)
+	set -e; . ./edksetup.sh; \
+		build -a X64 \
+			-t $(EDK2_TOOLCHAIN) \
+			-p OvmfPkg/Microvm/MicrovmX64.dsc \
+			$(MICROVM_4M_FLAGS) -b $(BUILD_TYPE)
+	cp $(MICROVM_BUILD_DIR)/FV/MICROVM.fd \
+		$(MICROVM_INSTALL_DIR)/MICROVM_4M.fd
 
 build-ovmf: $(OVMF_BINARIES) $(OVMF_IMAGES) $(OVMF_PREENROLLED_VARS)
 $(OVMF_BINARIES) $(OVMF_IMAGES): debian/setup-build-stamp
@@ -315,4 +337,4 @@ update-dbx:
 	sed -i -e '/DBXUpdate-/d' debian/source/include-binaries
 	ls debian/DBXUpdate-*.bin >> debian/source/include-binaries
 
-.PHONY: build-ovmf build-ovmf32 build-ovmf-sev build-ovmf-tdx build-qemu-efi build-qemu-efi-aarch64 build-qemu-efi-riscv64 update-dbx
+.PHONY: build-ovmf build-ovmf32 build-ovmf-sev build-ovmf-tdx build-microvm build-qemu-efi build-qemu-efi-aarch64 build-qemu-efi-riscv64 update-dbx

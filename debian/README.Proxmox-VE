@@ -57,6 +57,18 @@ PkKek-1-snakeoil.pem
   OVMF_VARS.snakeoil.fd template. The password for the key is
   'snakeoil'.
 
+MICROVM_4M.fd
+  UEFI firmware for QEMU's microvm machine type, built from the dedicated
+  MicrovmX64 platform, as the OVMF images only support the i440fx and Q35
+  platforms. The microvm machine has no pflash device at all, so there are
+  no separate CODE and VARS images: this single combined image can only be
+  loaded via -bios, and the UEFI variable store is volatile. Boot entries or
+  keys changed at runtime are lost on shutdown, guests must boot through the
+  default removable media path (\EFI\BOOT\BOOTX64.EFI). The platform
+  supports neither SMM nor a TPM, so Secure Boot is only available in the
+  less secure, SMM-less variant, like with OVMF_CODE_4M.fd, and it cannot
+  drive transitional virtio-pci devices, use the non-transitional variants.
+
  -- dann frazier <dannf@debian.org>, Thu, 30 Sep 2021 10:33:08 -0600
 
 The AAVMF_CODE*.fd files provide UEFI firmware for a QEMU guest that is
