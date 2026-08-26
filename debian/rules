@@ -35,8 +35,6 @@ OVMF_COMMON_FLAGS  = $(COMMON_FLAGS)
 OVMF_COMMON_FLAGS += -DTPM2_ENABLE=TRUE
 OVMF_4M_FLAGS = $(OVMF_COMMON_FLAGS) -DFD_SIZE_4MB
 OVMF_4M_SMM_FLAGS = $(OVMF_4M_FLAGS) -DSMM_REQUIRE=TRUE
-OVMF32_4M_FLAGS = $(OVMF_COMMON_FLAGS) -DFD_SIZE_4MB
-OVMF32_4M_SMM_FLAGS =  $(OVMF32_4M_FLAGS) -DSMM_REQUIRE=TRUE
 OVMF_SEV_4M_FLAGS = $(OVMF_4M_FLAGS)
 OVMF_TDX_4M_FLAGS = $(OVMF_4M_FLAGS)
 # the microvm platform has neither SMM nor TPM support
@@ -61,7 +59,7 @@ undefine CONF_PATH
 %:
 	dh $@
 
-override_dh_auto_build: build-qemu-efi-aarch64 build-ovmf build-ovmf32 build-ovmf-sev build-ovmf-tdx build-microvm build-qemu-efi-riscv64
+override_dh_auto_build: build-qemu-efi-aarch64 build-ovmf build-ovmf-sev build-ovmf-tdx build-microvm build-qemu-efi-riscv64
 
 debian/setup-build-stamp:
 	cp -a debian/Logo.bmp MdeModulePkg/Logo/Logo.bmp
@@ -77,13 +75,6 @@ OVMF_SHELL =  $(OVMF3264_BUILD_DIR)/X64/Shell.efi
 OVMF_BINARIES = $(OVMF_ENROLL) $(OVMF_SHELL)
 OVMF_IMAGES := $(addprefix $(OVMF_INSTALL_DIR)/,OVMF_CODE_4M.fd OVMF_CODE_4M.secboot.fd OVMF_VARS_4M.fd)
 OVMF_PREENROLLED_VARS := $(addprefix $(OVMF_INSTALL_DIR)/,OVMF_VARS_4M.ms.fd OVMF_VARS_4M.snakeoil.fd)
-
-OVMF32_INSTALL_DIR = debian/ovmf32-install
-OVMF32_BUILD_ROOT = Build/OvmfIa32
-OVMF32_BUILD_DIR = $(OVMF32_BUILD_ROOT)/$(BUILD_TYPE)_$(EDK2_TOOLCHAIN)
-OVMF32_SHELL = $(OVMF32_BUILD_DIR)/IA32/Shell.efi
-OVMF32_BINARIES = $(OVMF32_SHELL)
-OVMF32_IMAGES  := $(addprefix $(OVMF32_INSTALL_DIR)/,OVMF32_CODE_4M.secboot.fd OVMF32_VARS_4M.fd)
 
 OVMF_SEV_INSTALL_DIR = debian/ovmf-sev-install
 OVMF_SEV_BUILD_ROOT = Build/OvmfX64
@@ -125,20 +116,6 @@ AAVMF_PREENROLLED_VARS = $(addprefix $(AAVMF_INSTALL_DIR)/,AAVMF_VARS.ms.fd AAVM
 RISCV64_BUILD_ROOT = Build/RiscVVirtQemu
 RISCV64_BUILD_DIR = $(RISCV64_BUILD_ROOT)/$(BUILD_TYPE)_$(EDK2_TOOLCHAIN)
 RISCV64_IMAGES    = $(addprefix $(RISCV64_BUILD_DIR)/FV/,RISCV_VIRT_CODE.fd RISCV_VIRT_VARS.fd)
-
-build-ovmf32: $(OVMF32_BINARIES) $(OVMF32_IMAGES)
-$(OVMF32_BINARIES) $(OVMF32_IMAGES): debian/setup-build-stamp
-	rm -rf $(OVMF32_INSTALL_DIR)
-	mkdir $(OVMF32_INSTALL_DIR)
-	set -e; . ./edksetup.sh; \
-		build -a IA32 \
-			-t $(EDK2_TOOLCHAIN) \
-			-p OvmfPkg/OvmfPkgIa32.dsc \
-			$(OVMF32_4M_SMM_FLAGS) -b $(BUILD_TYPE)
-	cp $(OVMF32_BUILD_DIR)/FV/OVMF_CODE.fd \
-		$(OVMF32_INSTALL_DIR)/OVMF32_CODE_4M.secboot.fd
-	cp $(OVMF32_BUILD_DIR)/FV/OVMF_VARS.fd \
-		$(OVMF32_INSTALL_DIR)/OVMF32_VARS_4M.fd
 
 build-ovmf-sev: $(OVMF_SEV_BINARIES) $(OVMF_SEV_IMAGES)
 $(OVMF_SEV_BINARIES) $(OVMF_SEV_IMAGES): debian/setup-build-stamp
@@ -337,4 +314,4 @@ update-dbx:
 	sed -i -e '/DBXUpdate-/d' debian/source/include-binaries
 	ls debian/DBXUpdate-*.bin >> debian/source/include-binaries
 
-.PHONY: build-ovmf build-ovmf32 build-ovmf-sev build-ovmf-tdx build-microvm build-qemu-efi build-qemu-efi-aarch64 build-qemu-efi-riscv64 update-dbx
+.PHONY: build-ovmf build-ovmf-sev build-ovmf-tdx build-microvm build-qemu-efi build-qemu-efi-aarch64 build-qemu-efi-riscv64 update-dbx
