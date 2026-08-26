@@ -5,7 +5,6 @@ pve-edk2-firmware source: source-contains-prebuilt-windows-binary [CryptoPkg/Lib
 pve-edk2-firmware source: source-contains-prebuilt-windows-binary [SecurityPkg/DeviceSecurity/SpdmLib/libspdm/os_stub/openssllib/openssl/gost-engine/tcl_tests/kbstrike.exe]
 pve-edk2-firmware source: source-is-missing [*/brotli/js/*.js]
 pve-edk2-firmware source: source-is-missing [BaseTools/Bin/GccLto/liblto-aarch64.a]
-pve-edk2-firmware source: source-is-missing [BaseTools/Bin/GccLto/liblto-arm.a]
 pve-edk2-firmware source: source-is-missing [CryptoPkg/Library/OpensslLib/openssl/cloudflare-quiche/quiche/deps/boringssl/src/util/ar/testdata/linux/bar.cc.o]
 pve-edk2-firmware source: source-is-missing [CryptoPkg/Library/OpensslLib/openssl/cloudflare-quiche/quiche/deps/boringssl/src/util/ar/testdata/linux/foo.c.o]
 pve-edk2-firmware source: source-is-missing [CryptoPkg/Library/OpensslLib/openssl/krb5/*/*.htm]

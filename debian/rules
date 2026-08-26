@@ -5,7 +5,7 @@ SHELL=/bin/bash
 include /usr/share/dpkg/default.mk
 
 BUILD_TYPE ?= RELEASE
-EDK2_TOOLCHAIN = GCC5
+EDK2_TOOLCHAIN = GCC
 export $(EDK2_TOOLCHAIN)_AARCH64_PREFIX=aarch64-linux-gnu-
 export $(EDK2_TOOLCHAIN)_RISCV64_PREFIX=riscv64-linux-gnu-
 
@@ -112,10 +112,10 @@ MICROVM_BINARIES = $(MICROVM_SHELL)
 # the microvm platform only defines a combined flash image, there is no CODE/VARS split
 MICROVM_IMAGES := $(addprefix $(MICROVM_INSTALL_DIR)/,MICROVM_4M.fd)
 
-QEMU_EFI_BUILD_ROOT = Build/ArmVirtQemu-$(EDK2_HOST_ARCH)
+QEMU_EFI_BUILD_ROOT = Build/ArmVirtQemu-$(EDK2_ARCH_DIR)
 QEMU_EFI_BUILD_DIR = $(QEMU_EFI_BUILD_ROOT)/$(BUILD_TYPE)_$(EDK2_TOOLCHAIN)
 AAVMF_INSTALL_DIR = debian/aavmf-install
-AAVMF_BUILD_ROOT = Build/ArmVirtQemu-AARCH64
+AAVMF_BUILD_ROOT = Build/ArmVirtQemu-AArch64
 AAVMF_BUILD_DIR = $(AAVMF_BUILD_ROOT)/$(BUILD_TYPE)_$(EDK2_TOOLCHAIN)
 AAVMF_ENROLL    = $(AAVMF_BUILD_DIR)/AARCH64/EnrollDefaultKeys.efi
 AAVMF_SHELL     = $(AAVMF_BUILD_DIR)/AARCH64/Shell.efi
@@ -231,9 +231,6 @@ enroll_snakeoil = virt-fw-vars --input $(1) --output $(2) \
 
 BaseTools/Bin/GccLto/liblto-aarch64.a:	BaseTools/Bin/GccLto/liblto-aarch64.s
 	$($(EDK2_TOOLCHAIN)_AARCH64_PREFIX)gcc -c -fpic $< -o $@
-
-BaseTools/Bin/GccLto/liblto-arm.a: BaseTools/Bin/GccLto/liblto-arm.s
-	$($(EDK2_TOOLCHAIN)_ARM_PREFIX)gcc -c -fpic $< -o $@
 
 build-qemu-efi: debian/setup-build-stamp
 	rm -rf $(QEMU_EFI_INSTALL_DIR)
