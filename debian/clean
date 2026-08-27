@@ -14,6 +14,10 @@ UefiCpuPkg/ResetVector/Vtf0/Bin/*.raw
 debian/PkKek-1-vendor.pem
 debian/oem-string-snakeoil
 debian/oem-string-vendor
+debian/aavmf-install/
+debian/microvm-install/
 debian/ovmf-install/
+debian/ovmf-sev-install/
+debian/ovmf-tdx-install/
 debian/python/UEFI/__pycache__/
 debian/setup-build-stamp
