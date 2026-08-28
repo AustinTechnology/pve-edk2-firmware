@@ -1,3 +1,25 @@
+pve-edk2-firmware (4.2026.08-1) trixie; urgency=medium
+
+  * update edk2 to edk2-stable202608 release and refresh patches. Besides many
+    bug and security fixes, the changes most relevant for guests are:
+    - the Secure Boot image now provides the Windows SMM Security Mitigation
+      Table (WSMT). Windows needs this table to report virtualization-based
+      security features like HVCI and Credential Guard as available.
+    - fix CVE-2024-13745: a guest with a vTPM could get a different partition
+      table measured into PCR 5 than the one it actually booted from.
+    - enrolling a Secure Boot platform key that is not self-signed no longer
+      requires switching the firmware to custom mode first.
+
+  * drop the 32-bit only OVMF images, upstream removed the OvmfPkgIa32
+    platform and Proxmox VE never referenced them.
+
+  * disable the EFI memory attributes protocol through the upstream build-time
+    knob instead of patching out its producers. Guests that want the protocol
+    can now request it with the QEMU option
+    '-fw_cfg name=opt/org.tianocore/UninstallMemAttrProtocol,string=n'.
+
+ -- Proxmox Support Team <support@proxmox.com>  Wed, 26 Aug 2026 16:20:39 +0200
+
 pve-edk2-firmware (4.2025.05-3) trixie; urgency=medium
 
   * build secureboot-enabled image for aarch64.
