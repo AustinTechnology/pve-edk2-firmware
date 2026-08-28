@@ -17,3 +17,4 @@ pve-edk2-firmware source: source-is-missing [SecurityPkg/DeviceSecurity/SpdmLib/
 pve-edk2-firmware source: source-is-missing [SecurityPkg/DeviceSecurity/SpdmLib/libspdm/os_stub/openssllib/openssl/krb5/src/windows/leash/htmlhelp/html/Renew_Tickets2.html]
 pve-edk2-firmware source: superfluous-file-pattern * [debian/copyright:*]
 pve-edk2-firmware source: unknown-field Build-Indep-Architecture
+pve-edk2-firmware source: unpack-message-for-orig *ar failed for *BaseTools/Bin/GccLto/liblto-aarch64.a
