@@ -14,4 +14,4 @@ docker run --rm \
   --mount "type=bind,src=$repo_root,dst=/src" \
   --workdir /src \
   "$image" \
-  bash -lc 'dpkg-checkbuilddeps && make deb'
+  bash -lc 'dpkg-checkbuilddeps && make deb && version="$(dpkg-parsechangelog -SVersion)" && lintian ../pve-edk2-firmware*_"$version"_all.deb'
