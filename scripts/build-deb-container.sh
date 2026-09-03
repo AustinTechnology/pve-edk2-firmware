@@ -11,6 +11,7 @@ git -C "$repo_root/edk2" submodule update --init
 
 docker build --tag "$image" --file "$repo_root/docker/Dockerfile.build" "$repo_root"
 docker run --rm \
+  --user "$(id -u):$(id -g)" \
   --mount "type=bind,src=$repo_root,dst=/src" \
   --workdir /src \
   "$image" \
