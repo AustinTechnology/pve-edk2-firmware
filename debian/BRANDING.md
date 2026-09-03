@@ -7,7 +7,7 @@ This derivative changes only `debian/Logo.bmp`, which the upstream Proxmox build
 | File | Purpose | SHA-256 |
 | --- | --- | --- |
 | `branding-source.svg` | Original Austin Technology vector artwork supplied for this build | `9572a039233336f39abc5a19e524db116ca9efbc5482070eeeff37a2dd1c800f` |
-| `Logo.bmp` | Firmware input: uncompressed 512×160, 24-bit BMP, dark navy background and safe margins | `cc6d477d5888c177f87181c2d68ed269818d5b09e27994c295e74c7eccd240c0` |
+| `Logo.bmp` | Firmware input: uncompressed 512×160, 24-bit BMP, dark navy background and safe margins | `321ba0919f842d9baddde65b05155b1510bfb69969a998ed0afe0fecf44ea89c` |
 
 ## Scope
 

@@ -31,7 +31,9 @@ def main() -> None:
     pixels = bytearray(row_size * height)
     for row in range(height):
         src = pixel_offset + row * width * 4
-        dst = row * row_size
+        # The source is top-down; write the destination in conventional
+        # bottom-up order because EDK II's BMP parser rejects a negative height.
+        dst = (height - 1 - row) * row_size
         for column in range(width):
             # Input masks are B=0x000000ff, G=0x0000ff00, R=0x00ff0000.
             b, g, r, _alpha = data[src + column * 4 : src + column * 4 + 4]
@@ -41,7 +43,7 @@ def main() -> None:
     header = struct.pack(
         "<2sIHHI", b"BM", file_size, 0, 0, 54
     ) + struct.pack(
-        "<IiiHHIIiiII", 40, width, -height, 1, 24, 0, len(pixels), 0, 0, 0, 0
+        "<IiiHHIIiiII", 40, width, height, 1, 24, 0, len(pixels), 0, 0, 0, 0
     )
     args.output.write_bytes(header + pixels)
 
