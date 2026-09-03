@@ -11,6 +11,7 @@ RUN apt-get update \
       gcc-aarch64-linux-gnu \
       gcc-riscv64-linux-gnu \
       iasl \
+      lintian \
       mtools \
       nasm \
       python3 \
