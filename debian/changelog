@@ -4,7 +4,7 @@ pve-edk2-firmware (4.2026.08-1+austin1) trixie; urgency=medium
   * Preserve upstream firmware feature flags, Secure Boot keys, DBX updates,
     and all OVMF variant build definitions unchanged.
 
- -- Austin Technology Firmware Build <root@localhost>  Thu, 03 Sep 2026 13:30:35 +0800
+ -- Damian Guppy <damian@guppy.au>  Thu, 03 Sep 2026 13:30:35 +0800
 
 pve-edk2-firmware (4.2026.08-1) trixie; urgency=medium
 
