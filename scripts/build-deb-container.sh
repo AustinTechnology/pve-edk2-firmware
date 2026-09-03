@@ -6,6 +6,7 @@ image=${IMAGE:-austintechnology/pve-edk2-builder:trixie}
 
 git -C "$repo_root" submodule update --init edk2
 git -C "$repo_root/edk2" submodule update --init \
+  BaseTools/Source/C/BrotliCompress/brotli \
   CryptoPkg/Library/OpensslLib/openssl \
   MdeModulePkg/Library/BrotliCustomDecompressLib/brotli \
   MdePkg/Library/MipiSysTLib/mipisyst
