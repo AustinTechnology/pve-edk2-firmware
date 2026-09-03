@@ -1,3 +1,11 @@
+pve-edk2-firmware (4.2026.08-1+austin1) trixie; urgency=medium
+
+  * Replace the EDK II setup/boot logo with the Austin Technology wordmark.
+  * Preserve upstream firmware feature flags, Secure Boot keys, DBX updates,
+    and all OVMF variant build definitions unchanged.
+
+ -- Damian Guppy <damian@guppy.au>  Thu, 03 Sep 2026 13:30:35 +0800
+
 pve-edk2-firmware (4.2026.08-1) trixie; urgency=medium
 
   * update edk2 to edk2-stable202608 release and refresh patches. Besides many
