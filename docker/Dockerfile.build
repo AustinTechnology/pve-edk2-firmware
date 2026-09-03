@@ -1,0 +1,26 @@
+FROM debian:trixie-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      bc \
+      build-essential \
+      debhelper-compat \
+      dosfstools \
+      gcc-aarch64-linux-gnu \
+      gcc-riscv64-linux-gnu \
+      iasl \
+      mtools \
+      nasm \
+      python3 \
+      python3-pexpect \
+      python3-virt-firmware \
+      qemu-system-arm \
+      qemu-system-x86 \
+      qemu-utils \
+      uuid-dev \
+      xorriso \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /src
